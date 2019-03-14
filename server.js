@@ -6,7 +6,9 @@ const {Pacientes}=require('./models//index')
 const {Farmacos}=require('./models//index')
 const PORT=process.env.PORT || 3000 
 const app=express();
+const cors=require('cors')
 
+app.use(cors())
 
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json())
@@ -67,7 +69,7 @@ app.post('/api/v1/create/medicine',(req,res)=>{
 })
 app.get(`/api/v1/patients`,(req,res)=>{
     Pacientes.find().
-        populate('prescripciones.farmacos','prescripciones.posologia.medico').
+        populate('prescripciones.farmacos').populate('prescripciones.posologia.medico').
         exec()    
         .then((users)=>{
             res.send(users)
