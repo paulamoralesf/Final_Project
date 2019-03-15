@@ -10,7 +10,7 @@ const pacienteSchema=new mongoose.Schema({
         type: String,
         required: true
     },
-    CC:{
+    cedula:{
         type: Number,
         required:true
     },
