@@ -18,11 +18,11 @@ app.get('/',(req,res)=>{
 })
 app.post('/api/v1/create/patient',(req,res)=>{
     console.log(req.body)
-    const {foto,nombre,CC,EPS,edad}=req.body
+    const {foto,nombre,cedula,EPS,edad}=req.body
     const newPatient= Pacientes({
         foto,
         nombre,
-        CC,
+        cedula,
         EPS,
         edad
     })
