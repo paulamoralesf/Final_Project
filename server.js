@@ -18,8 +18,9 @@ app.get('/',(req,res)=>{
 })
 app.post('/api/v1/create/patient',(req,res)=>{
     console.log(req.body)
-    const {nombre,CC,EPS,edad}=req.body
+    const {foto,nombre,CC,EPS,edad}=req.body
     const newPatient= Pacientes({
+        foto,
         nombre,
         CC,
         EPS,
@@ -36,8 +37,9 @@ app.post('/api/v1/create/patient',(req,res)=>{
 })
 app.post('/api/v1/create/doctor',(req,res)=>{
     console.log(req.body)
-    const {nombre,TP,especialidad}=req.body
+    const {foto,nombre,TP,especialidad}=req.body
     const newDoctor= Medicos({
+        foto,
         nombre,
         TP,
         especialidad
@@ -53,8 +55,9 @@ app.post('/api/v1/create/doctor',(req,res)=>{
 })
 app.post('/api/v1/create/medicine',(req,res)=>{
     console.log(req.body)
-    const {nombre,posologia}=req.body
+    const {imagen,nombre,posologia}=req.body
     const newMedicine= Farmacos({
+        imagen,
         nombre,
         posologia
     })
@@ -95,6 +98,57 @@ app.get(`/api/v1/medicines`,(req,res)=>{
             res.status(409).send(err)
         })
 
+})
+app.get('/api/v1/patient/:uid',(req,res)=>{
+    Pacientes.findById(req.params.uid).exec()
+        .then((user)=>{
+            res.send(user)
+        }).catch((err) => {
+            res.status(409).send(err)
+        })
+})
+app.get('/api/v1/doctor/:uid',(req,res)=>{
+    Medicos.findById(req.params.uid).exec()
+        .then((user)=>{
+            res.send(user)
+        }).catch((err) => {
+            res.status(409).send(err)
+        })
+})
+app.get('/api/v1/medicines/:uid',(req,res)=>{
+    Farmacos.findById(req.params.uid).exec()
+        .then((user)=>{
+            res.send(user)
+        }).catch((err) => {
+            res.status(409).send(err)
+        })
+})
+app.put('/api/v1/patient/:uid',(req,res)=>{
+    const {uid}=req.params
+    Pacientes.findByIdAndUpdate(uid,{$set:req.body},{new:true}).exec()
+        .then((newUser)=>{
+            res.send(newUser)
+        }).catch((err) =>{
+            res.status(409).send(err)
+        })
+})
+app.delete('/api/v1/patient/:uid',(req,res)=>{
+    const {uid}=req.params
+    Pacientes.findByIdAndDelete(req.params.uid).exec()
+        .then((user)=>{
+            res.sendStatus(204)//No content
+        }).catch((err) => {
+            res.status(409).send(err)
+        })
+})
+app.delete('/api/v1/medicine/:uid',(req,res)=>{
+    const {uid}=req.params
+    Farmacos.findByIdAndDelete(req.params.uid).exec()
+        .then((user)=>{
+            res.sendStatus(204)//No content
+        }).catch((err) => {
+            res.status(409).send(err)
+        })
 })
 app.post('/api/v1/patients/:idPatient/medicine/:idMedicine',(req,res)=>{
     const {idPatient}=req.params
